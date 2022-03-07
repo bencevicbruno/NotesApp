@@ -23,7 +23,6 @@ final class PersistenceService: PersistenceServiceProtocol {
             UserDefaults.standard.load(key: "local_user")
         }
         set {
-            print(newValue)
             UserDefaults.standard.save(newValue, key: "local_user")
         }
     }

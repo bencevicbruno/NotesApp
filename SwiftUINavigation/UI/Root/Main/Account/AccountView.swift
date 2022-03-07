@@ -19,9 +19,10 @@ struct AccountView: View {
                 navigationBar
                 
                 content
+                    .padding(.bottom, MainTabBar.height)
             }
-            .edgesIgnoringSafeArea(.top)
         }
+        .removeNavigationBar()
         .confirmationDialog($viewModel.confirmationDialog)
     }
 }
@@ -31,24 +32,36 @@ private extension AccountView {
     var background: some View {
         Image("background_account")
             .resizable()
-            .ignoresSafeArea(.all, edges: .top)
     }
     
     var navigationBar: some View {
-        VStack(spacing: 0) {
+        HStack(spacing: 0) {
             Rectangle()
                 .fill(.white)
-                .frame(height: UIScreen.main.topSafeAreaPadding)
+                .frame(width: 20, height: 20)
             
-            ZStack(alignment: .center) {
-                RoundedRectangle.rounded(.white, top: 0, bottom: 10)
-                
-                Text("Account")
-                    .font(.system(size: 24))
-                    .fontWeight(.bold)
-            }
-            .frame(height: 50)
+            Spacer(minLength: 10)
+            
+            Text("Account")
+                .font(.system(size: 24))
+                .fontWeight(.bold)
+            
+            Spacer(minLength: 10)
+            
+            Image(systemName: "arrowshape.turn.up.backward")
+                .resizable()
+                .scaledToFit()
+                .font(.system(size: 20, weight: .medium))
+                .frame(width: 20, height: 20)
+                .foregroundColor(.blue)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    viewModel.showLogOutDialog()
+                }
         }
+        .padding(.horizontal, 10)
+        .frame(height: 50)
+        .background(RoundedRectangle.rounded(.white, top: 0, bottom: 10))
     }
     
     var content: some View {

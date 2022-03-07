@@ -50,6 +50,10 @@ struct MainCoordinatorView: View {
                     }
                     .tag(MainTab.account)
             }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .overlay(alignment: .bottom) {
+                MainTabBar(currentTab: $coordinator.currentTab)
+            }
         }
         .navigationViewStyle(.stack)
     }

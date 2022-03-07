@@ -15,47 +15,65 @@ struct ConfirmationDialogView: View {
     @State private var didAnimate = false
     
     var body: some View {
-        VStack {
-            Text(dialog.title)
-                .font(.system(size: 20))
-                .fontWeight(.bold)
-                .padding(.vertical, 10)
+        ZStack {
+            Rectangle()
+                .fill(.ultraThinMaterial)
+                .opacity(didAnimate ? 0.5 : 0)
+                .allowsHitTesting(didAnimate)
+                .onTapGesture {
+                    onCancelTapped()
+                }
             
-            if let message = dialog.message {
-                Text(message)
-            }
-            
-            HStack(spacing: 0) {
-                Text(dialog.cancelTitle)
-                    .foregroundColor(.blue)
-                    .frame(height: 40)
-                    .frame(maxWidth: 125)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        onCancelTapped()
+            VStack {
+                Group {
+                    Text(dialog.title)
+                        .font(.system(size: 20))
+                        .fontWeight(.bold)
+                        .padding(.vertical, 10)
+                    
+                    if let message = dialog.message {
+                        Text(message)
                     }
-                    .background(RoundedRectangle.rounded(.ultraThin, topLeft: 0, topRight: 0, bottomLeft: 5, bottomRight: 0))
+                }
+                .padding(10)
                 
-                Text(dialog.confirmationTitle)
-                    .foregroundColor(.blue)
-                    .frame(height: 40)
-                    .frame(maxWidth: 125)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        onConfirmTapped()
-                    }
-                    .background(RoundedRectangle.rounded(.ultraThin, topLeft: 0, topRight: 0, bottomLeft: 0, bottomRight: 5))
+                HStack(spacing: 1) {
+                    Text(dialog.cancelTitle)
+                        .foregroundColor(.blue)
+                        .frame(height: 50)
+                        .frame(maxWidth: 135)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            onCancelTapped()
+                        }
+                        .background(RoundedRectangle.rounded(.ultraThin, topLeft: 0, topRight: 0, bottomLeft: 5, bottomRight: 0))
+                    
+                    Text(dialog.confirmationTitle)
+                        .foregroundColor(.blue)
+                        .frame(height: 50)
+                        .frame(maxWidth: 135)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            onConfirmTapped()
+                        }
+                        .background(RoundedRectangle.rounded(.ultraThin, topLeft: 0, topRight: 0, bottomLeft: 0, bottomRight: 5))
+                }
             }
+            .multilineTextAlignment(.center)
+            .background(RoundedRectangle(cornerRadius: 10)
+                            .fill(.thinMaterial))
+            .frame(maxWidth: 250)
+            .offset(y: didAnimate ? 0 : UIScreen.main.bounds.height)
+            .opacity(didAnimate ? 1 : 0)
         }
-        .padding(10)
-        .background(RoundedRectangle(cornerRadius: 10)
-                        .fill(.thinMaterial))
-        .frame(maxWidth: 250)
-        .offset(y: didAnimate ? 0 : UIScreen.main.bounds.height)
-        .opacity(didAnimate ? 1 : 0)
         .onAppear {
             withAnimation {
                 didAnimate = true
+            }
+        }
+        .onDisappear {
+            withAnimation {
+                didAnimate = false
             }
         }
     }
@@ -69,23 +87,23 @@ struct ConfirmationDialogView: View {
 private extension ConfirmationDialogView {
     
     func onCancelTapped() {
-        withAnimation {
-            didAnimate = false
-        }
         dialog.cancelAction?()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            withAnimation {
-                isVisible = false
-            }
-        }
+        disappear()
     }
     
     func onConfirmTapped() {
         dialog.confirmAction?()
-        withAnimation {
-            isVisible = false
+        disappear()
+    }
+    
+    func disappear() {
+        
+        withAnimation(.linear(duration: 0.5)) {
             didAnimate = false
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            isVisible = false
         }
     }
 }

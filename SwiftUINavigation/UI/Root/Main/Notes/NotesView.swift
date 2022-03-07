@@ -19,9 +19,10 @@ struct NotesView: View {
                 navigationBar
                 
                 content
+                    .padding(.bottom, MainTabBar.height)
             }
-            .edgesIgnoringSafeArea(.top)
         }
+        .removeNavigationBar()
     }
 }
 
@@ -30,45 +31,36 @@ private extension NotesView {
     var background: some View {
         Image("background_notes")
             .resizable()
-            .ignoresSafeArea(.all, edges: .top)
     }
     
     var navigationBar: some View {
-        VStack(spacing: 0) {
+        HStack(spacing: 0) {
             Rectangle()
                 .fill(.white)
-                .frame(height: UIScreen.main.topSafeAreaPadding)
+                .frame(width: 20, height: 20)
             
-            ZStack(alignment: .center) {
-                RoundedRectangle.rounded(.white, top: 0, bottom: 10)
-                
-                HStack(spacing: 0) {
-                    Rectangle()
-                        .fill(.white)
-                        .frame(width: 20, height: 20)
-                    
-                    Spacer(minLength: 10)
-                    
-                    Text("Notes")
-                        .font(.system(size: 24))
-                        .fontWeight(.bold)
-                    
-                    Spacer(minLength: 10)
-                    
-                    Image(systemName: "plus")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                        .foregroundColor(.blue)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            viewModel.goToNewNote()
-                        }
+            Spacer(minLength: 10)
+            
+            Text("Notes")
+                .font(.system(size: 24))
+                .fontWeight(.bold)
+            
+            Spacer(minLength: 10)
+            
+            Image(systemName: "plus")
+                .resizable()
+                .scaledToFit()
+                .font(.system(size: 20, weight: .medium))
+                .frame(width: 20, height: 20)
+                .foregroundColor(.blue)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    viewModel.goToNewNote()
                 }
-                .padding(.horizontal, 10)
-            }
-            .frame(height: 50)
         }
+        .padding(.horizontal, 10)
+        .frame(height: 50)
+        .background(RoundedRectangle.rounded(.white, top: 0, bottom: 10))
     }
     
     var content: some View {

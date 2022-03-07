@@ -28,13 +28,14 @@ final class AccountViewModel: ObservableObject {
     }
     
     func showLogOutDialog() {
-        withAnimation {
-            self.confirmationDialog = ConfirmationDialog(title: "Log out?",
-                                                         message: "You can always sign back in.",
-                                                         confirmationTitle: "Sign out",
-                                                         confirmAction: { [weak self] in self?.logOut() })
-        }
+        self.confirmationDialog = ConfirmationDialog(title: "Log out?",
+                                                     message: "You can always log back in.",
+                                                     confirmationTitle: "Log out",
+                                                     confirmAction: { [weak self] in self?.logOut() })
     }
+}
+
+private extension AccountViewModel {
     
     func logOut() {
         persistenceService.localUser = nil
