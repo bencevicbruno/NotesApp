@@ -1,5 +1,5 @@
 //
-//  NoteShareViewModel.swift
+//  ShareNoteViewModel.swift
 //  SwiftUINavigation
 //
 //  Created by Bruno Benčević on 28.02.2022..
@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class NoteShareViewModel: ObservableObject {
+final class ShareNoteViewModel: ObservableObject {
     
     private(set) var note: Note
     
@@ -18,15 +18,13 @@ final class NoteShareViewModel: ObservableObject {
         self.note = note
     }
     
-    func dismiss() {
+    // MARK: - Interaction
+    
+    func xTapped() {
         self.onDismissed?()
     }
     
-    func share() {
+    func shareTapped() {
         self.onDismissedToRoot?()
-    }
-    
-    deinit {
-        
     }
 }

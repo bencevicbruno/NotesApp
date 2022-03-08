@@ -48,6 +48,8 @@ struct NoteCell: View {
             onTapped?()
         }
         .padding(.horizontal, 20)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
     
     init(_ note: Note, onTapped: EmptyCallback? = nil, onHeartTapped: EmptyCallback? = nil) {
@@ -60,6 +62,5 @@ struct NoteCell: View {
 struct NoteCell_Previews: PreviewProvider {
     static var previews: some View {
         NoteCell(.test)
-            .background(Color.red)
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 
 enum MainTab: CaseIterable, Identifiable {
     case notes
-    case favorites
+    case groups
     case account
     
     var id: Self {
@@ -20,10 +20,10 @@ enum MainTab: CaseIterable, Identifiable {
         switch(self) {
         case .notes:
             return "note.text"
-        case .favorites:
-            return "heart"
+        case .groups:
+            return "person.3"
         case .account:
-            return "person"
+            return "gearshape"
         }
     }
     
@@ -31,10 +31,10 @@ enum MainTab: CaseIterable, Identifiable {
         switch(self) {
         case .notes:
             return "note.text"
-        case .favorites:
-            return "heart.fill"
+        case .groups:
+            return "person.3.fill"
         case .account:
-            return "person.fill"
+            return "gearshape.fill"
         }
     }
     
@@ -42,8 +42,8 @@ enum MainTab: CaseIterable, Identifiable {
         switch(self) {
         case .notes:
             return "Notes"
-        case .favorites:
-            return "Favorites"
+        case .groups:
+            return "Groups"
         case .account:
             return "Account"
         }

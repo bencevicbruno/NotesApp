@@ -27,6 +27,8 @@ final class AccountViewModel: ObservableObject {
         email = persistenceService.localUser?.email ?? "unkown"
     }
     
+    // MARK: - Interaction
+    
     func showLogOutDialog() {
         self.confirmationDialog = ConfirmationDialog(title: "Log out?",
                                                      message: "You can always log back in.",

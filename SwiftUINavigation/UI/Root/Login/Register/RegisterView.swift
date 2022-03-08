@@ -143,7 +143,8 @@ struct RegisterView: View {
                     .padding(.vertical, 10)
                     .padding(.horizontal, 50)
                     .background(RoundedRectangle(cornerRadius: 5)
-                                    .fill(Color.body))
+                                    .fill(Color.body)
+                                    .shadow(color: .gray, radius: 5, x: 0, y: 5))
             }
             
             Spacer()

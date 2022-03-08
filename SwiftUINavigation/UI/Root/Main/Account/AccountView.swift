@@ -65,29 +65,25 @@ private extension AccountView {
     }
     
     var content: some View {
-        VStack {
-            Text("Hello, \(viewModel.name)")
-            
-            Button("Log Out") {
-                viewModel.showLogOutDialog()
-            }
-            .buttonStyle(.bordered)
-            
-            Group {
-                Text("TODO: Deep-link with notification")
-                    .fontWeight(.bold)
-                
-                Text("ie. Reminder to read the Bible")
-            }
-            .multilineTextAlignment(.leading)
-        }
-        .frame(maxWidth: .infinity, minHeight: 100)
-        .padding(.vertical, 10)
-        .padding(.horizontal, 20)
-        .background(RoundedRectangle(cornerRadius: 10)
-                        .fill(.thinMaterial))
-        .padding(.vertical, 10)
-        .padding(.horizontal, 20)
+        EmptyView()
+//        VStack {
+//            Text("Hello, \(viewModel.name)")
+//            
+//            Group {
+//                Text("TODO: Deep-link with notification")
+//                    .fontWeight(.bold)
+//                
+//                Text("ie. Reminder to read the Bible")
+//            }
+//            .multilineTextAlignment(.leading)
+//        }
+//        .frame(maxWidth: .infinity, minHeight: 100)
+//        .padding(.vertical, 10)
+//        .padding(.horizontal, 20)
+//        .background(RoundedRectangle(cornerRadius: 10)
+//                        .fill(.thinMaterial))
+//        .padding(.vertical, 10)
+//        .padding(.horizontal, 20)
     }
 }
 

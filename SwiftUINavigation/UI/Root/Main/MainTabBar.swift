@@ -17,8 +17,8 @@ struct MainTabBar: View {
                 VStack(spacing: 5) {
                     Image(systemName: tab == currentTab ? tab.systemImageSelected : tab.systemImage)
                         .resizable()
-                        .scaledToFit()
-                        .frame(width: 25)
+                        .scaledToFill()
+                        .frame(width: 25, height: 25)
                     
                     Text(tab.title)
                         .font(.captionSmall)

@@ -11,19 +11,28 @@ final class PersistenceService: PersistenceServiceProtocol {
     
     var savedNotes: [Note] {
         get {
-            UserDefaults.standard.load() ?? []
+            UserDefaults.standard.load(.savedNotes) ?? []
         }
         set {
-            UserDefaults.standard.save(newValue)
+            UserDefaults.standard.save(newValue, .savedNotes)
         }
     }
     
     var localUser: LocalUser? {
         get {
-            UserDefaults.standard.load(key: "local_user")
+            UserDefaults.standard.load(.localUser)
         }
         set {
-            UserDefaults.standard.save(newValue, key: "local_user")
+            UserDefaults.standard.save(newValue, .localUser)
+        }
+    }
+    
+    var keepUserLoggedIn: Bool {
+        get {
+            UserDefaults.standard.load(.keepUserLoggedIn) ?? false
+        }
+        set {
+            UserDefaults.standard.save(newValue, .keepUserLoggedIn)
         }
     }
 }

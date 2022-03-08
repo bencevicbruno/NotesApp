@@ -26,15 +26,17 @@ final class NotesViewModel: ObservableObject {
         setupSubscribers()
     }
     
-    func goToDetail(noteIndex: Int) {
+    // MARK: - Interaction
+    
+    func noteCellTapped(noteIndex: Int) {
         self.onGoToDetail?(notes[noteIndex])
     }
     
-    func toggleFavorite(noteIndex: Int) {
+    func favoriteButtonTapped(noteIndex: Int) {
         notesService.toggleFavorite(noteIndex)
     }
     
-    func goToNewNote() {
+    func newNoteTapped() {
         self.onGoToNewNote?()
     }
 }

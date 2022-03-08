@@ -18,7 +18,7 @@ struct DialogView: View {
         ZStack {
             Rectangle()
                 .fill(.ultraThinMaterial)
-                .opacity(didAnimate ? 0.5 : 0)
+                .opacity(didAnimate ? 1 : 0)
                 .allowsHitTesting(didAnimate)
             
             VStack {
@@ -46,7 +46,7 @@ struct DialogView: View {
             }
             .multilineTextAlignment(.center)
             .background(RoundedRectangle(cornerRadius: 10)
-                            .fill(.thinMaterial))
+                            .fill(.white))
             .frame(maxWidth: 250)
             .offset(y: didAnimate ? 0 : UIScreen.main.bounds.height)
             .opacity(didAnimate ? 1 : 0)

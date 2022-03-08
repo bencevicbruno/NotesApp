@@ -22,7 +22,6 @@ struct Dialog {
     }
 }
 
-
 extension View {
     
     func dialog(_ dialog: Binding<Dialog?>) -> some View {

@@ -9,8 +9,8 @@ import Foundation
 
 extension UserDefaults {
  
-    func load<T>(key: String = "\(T.self)") -> T? where T: Decodable {
-        guard let data = self.object(forKey: key) as? Data else {
+    func load<T>(_ key: PersistenceKey) -> T? where T: Decodable {
+        guard let data = self.object(forKey: "\(key)") as? Data else {
             print("Unable to load \(key).")
             return nil
         }
@@ -24,13 +24,13 @@ extension UserDefaults {
         return t
     }
     
-    func save<T>(_ t: T, key: String = "\(T.self)") where T: Encodable {
+    func save<T>(_ t: T, _ key: PersistenceKey) where T: Encodable {
         guard let data = try? JSONEncoder().encode(t) else {
             print("Unable to save \(key).");
             return
         }
         
-        self.set(data, forKey: key)
+        self.set(data, forKey: "\(key)")
         print("Sucessfully saved \(key).")
     }
 }

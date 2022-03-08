@@ -55,7 +55,7 @@ private extension NotesView {
                 .foregroundColor(.blue)
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    viewModel.goToNewNote()
+                    viewModel.newNoteTapped()
                 }
         }
         .padding(.horizontal, 10)
@@ -65,21 +65,20 @@ private extension NotesView {
     
     var content: some View {
         ScrollView(.vertical) {
-            LazyVStack(spacing: 0) {
+            LazyVStack {
                 ForEach(viewModel.notes) { note in
                     let index = viewModel.notes.firstIndex(where: { $0.id == note.id })!
                     
                     NoteCell(viewModel.notes[index]) {
-                        viewModel.goToDetail(noteIndex: index)
+                        viewModel.noteCellTapped(noteIndex: index)
                     } onHeartTapped: {
-                        viewModel.toggleFavorite(noteIndex: index)
+                        viewModel.favoriteButtonTapped(noteIndex: index)
                     }
+                    .padding(.horizontal, 10)
                 }
             }
+            .padding(.top, 5)
         }
-        .background(RoundedRectangle
-                        .rounded(.ultraThin, top: 0, bottom: 10)
-                        .padding(.horizontal, 10))
         .clipped()
     }
 }

@@ -13,7 +13,7 @@ final class MainCoordinator: ObservableObject {
     @Published var currentTab: MainTab = .notes
     
     @Published var notesCoordinator = NotesCoordinator()
-    @Published var favoritesCoordinator = FavoritesCoordinator()
+    @Published var favoritesCoordinator = GroupsCoordinator()
     @Published var accountCoordinator = AccountCoordinator()
     
     var onLoggedOut: EmptyCallback?
@@ -33,21 +33,12 @@ struct MainCoordinatorView: View {
         NavigationView {
             TabView(selection: $coordinator.currentTab) {
                 NotesCoordinatorView(coordinator: coordinator.notesCoordinator)
-                    .tabItem {
-                        Label("Notes", systemImage: "note.text")
-                    }
                     .tag(MainTab.notes)
                 
-                FavoritesCoordinatorView(coordinator: coordinator.favoritesCoordinator)
-                    .tabItem {
-                        Label("Favorites", systemImage: "heart")
-                    }
-                    .tag(MainTab.favorites)
+                GroupsCoordinatorView(coordinator: coordinator.favoritesCoordinator)
+                    .tag(MainTab.groups)
                 
                 AccountCoordinatorView(coordinator: coordinator.accountCoordinator)
-                    .tabItem {
-                        Label("Account", systemImage: "person")
-                    }
                     .tag(MainTab.account)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))

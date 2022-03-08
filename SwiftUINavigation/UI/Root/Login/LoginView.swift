@@ -99,21 +99,26 @@ private extension LoginView {
             .frame(height: 30)
             .padding(.top, 30)
             
-            Button {
-                viewModel.loginTapped()
-            } label: {
-                Text("Log in")
-                    .fontWeight(.bold)
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 50)
-                    .background(RoundedRectangle(cornerRadius: 5)
-                                    .fill(Color.body))
-            }
-            .padding(.top, 10)
+            loginButton
+                .padding(.top, 10)
         }
         .padding(20)
         .background(RoundedRectangle(cornerRadius: 10)
                         .fill(Color.body))
+    }
+    
+    var loginButton: some View {
+        Button {
+            viewModel.loginTapped()
+        } label: {
+            Text("Log in")
+                .fontWeight(.bold)
+                .padding(.vertical, 10)
+                .padding(.horizontal, 50)
+                .background(RoundedRectangle(cornerRadius: 5)
+                                .fill(Color.body)
+                                .shadow(color: .gray, radius: 5, x: 0, y: 5))
+        }
     }
     
     var registerButton: some View {
@@ -125,7 +130,8 @@ private extension LoginView {
                 .padding(.vertical, 10)
                 .padding(.horizontal, 50)
                 .background(RoundedRectangle(cornerRadius: 5)
-                                .fill(Color.body))
+                                .fill(Color.body)
+                                .shadow(color: .gray, radius: 5, x: 0, y: 5))
         }
     }
     

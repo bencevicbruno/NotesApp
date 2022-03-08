@@ -13,7 +13,7 @@ final class NotesCoordinator: ObservableObject {
     @Published var viewModel = NotesViewModel(notesService: ServiceFactory.notesService)
     
     @Published var noteDetailViewModel: NoteDetailViewModel?
-    @Published var noteShareViewModel: NoteShareViewModel?
+    @Published var shareNoteViewModel: ShareNoteViewModel?
     @Published var noteNewViewModel: NoteNewViewModel?
     
     init() {
@@ -39,15 +39,15 @@ final class NotesCoordinator: ObservableObject {
     }
     
     func goToShare(note: Note) {
-        self.noteShareViewModel = NoteShareViewModel(note)
+        self.shareNoteViewModel = ShareNoteViewModel(note)
         
-        self.noteShareViewModel?.onDismissed = { [weak self] in
-            self?.noteShareViewModel = nil
+        self.shareNoteViewModel?.onDismissed = { [weak self] in
+            self?.shareNoteViewModel = nil
         }
         
-        self.noteShareViewModel?.onDismissedToRoot = { [weak self] in
+        self.shareNoteViewModel?.onDismissedToRoot = { [weak self] in
             self?.noteDetailViewModel = nil
-            self?.noteShareViewModel = nil
+            self?.shareNoteViewModel = nil
         }
     }
     
@@ -62,7 +62,7 @@ final class NotesCoordinator: ObservableObject {
     // Unused example function
     private func popToRoot() {
         self.noteDetailViewModel = nil
-        self.noteShareViewModel = nil
+        self.shareNoteViewModel = nil
     }
 }
 
@@ -76,8 +76,8 @@ struct NotesCoordinatorView: View {
             .pushNavigation(item: $coordinator.noteDetailViewModel) { viewModel in
                 NoteDetailView(viewModel: viewModel)
             }
-            .presentNavigation(item: $coordinator.noteShareViewModel) { viewModel in
-                NoteShareView(viewModel: viewModel)
+            .presentNavigation(item: $coordinator.shareNoteViewModel) { viewModel in
+                ShareNoteView(viewModel: viewModel)
             }
             .presentNavigation(item: $coordinator.noteNewViewModel) { viewModel in
                 NoteNewView(viewModel: viewModel)

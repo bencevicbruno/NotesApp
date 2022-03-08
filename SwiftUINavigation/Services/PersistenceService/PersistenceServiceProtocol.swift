@@ -11,4 +11,5 @@ protocol PersistenceServiceProtocol {
     
     var savedNotes: [Note] { get set }
     var localUser: LocalUser? { get set }
+    var keepUserLoggedIn: Bool { get set }
 }
