@@ -9,6 +9,7 @@ import Foundation
 
 protocol PersistenceServiceProtocol {
     
+    var lockNotes: Bool { get set }
     var savedNotes: [Note] { get set }
     var localUser: LocalUser? { get set }
 }

@@ -95,7 +95,6 @@ private extension LoginView {
         }, set: { focused in
             if focused {
                 focusedField = field
-                print("setting focues to\(field)")
             }
         })
     }

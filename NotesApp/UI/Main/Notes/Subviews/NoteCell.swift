@@ -10,16 +10,26 @@ import SwiftUI
 struct NoteCell: View {
     
     private var note: Note
+    private var isFromCloud: Bool
     
     var body: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 0) {
-                Text(note.title)
-                    .font(.body)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                HStack(spacing: 8) {
+                    Text(note.title)
+                        .font(.body)
+                        .fontWeight(.bold)
+                        
+                    if isFromCloud {
+                        Image(systemName: "icloud")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 16, height: 16)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text(note.description)
+                Text(note.author)
                     .font(.callout)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 4)
@@ -30,13 +40,7 @@ struct NoteCell: View {
             }
             .padding(.vertical, 8)
             
-            Image(systemName: note.isFavorite ? "heart.fill" : "heart")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 24)
-                .frame(width: 40, height: 40)
-                .frame(maxHeight: .infinity)
-                .contentShape(Rectangle())
+            Spacer()
         }
         .frame(maxWidth: .infinity, minHeight: 50)
         .fixedSize(horizontal: false, vertical: true)
@@ -45,14 +49,15 @@ struct NoteCell: View {
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
     
-    init(_ note: Note) {
+    init(_ note: Note, isFromCloud: Bool = false) {
         self.note = note
+        self.isFromCloud = isFromCloud
     }
 }
 
 struct NoteCell_Previews: PreviewProvider {
     static var previews: some View {
-        NoteCell(.sample)
+        NoteCell(.sample())
             .padding()
     }
 }

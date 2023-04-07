@@ -24,8 +24,6 @@ final class LoginViewModel: ObservableObject {
     func loginTapped() {
         let user = LocalUser(name: "Dunno, logged in with email", lastName: "dunno", email: username)
         persistenceService.localUser = user
-        print("\(persistenceService.localUser) from loginTapped")
-//        self.onGoToMain?()
         self.rootFlow = .main
     }
 }

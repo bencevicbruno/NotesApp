@@ -9,6 +9,14 @@ import Foundation
 
 final class PersistenceService: PersistenceServiceProtocol {
     
+    var lockNotes: Bool {
+        get {
+            CloudStoreService.instance.loadBool(key: "lockNotes")
+        } set {
+            CloudStoreService.instance.saveBool(newValue, key: "lockNotes")
+        }
+    }
+    
     var savedNotes: [Note] {
         get {
             UserDefaults.standard.load() ?? []

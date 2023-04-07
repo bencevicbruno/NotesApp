@@ -9,50 +9,88 @@ import Foundation
 
 final class NotesService: NotesServiceProtocol {
     
-    var notes: [Note] = []
+    static let instance = NotesService()
     
-    init() {
-        self.notes = ServiceFactory.persistenceService.savedNotes
+    private var isLoadingNotes = false
+    private var notes: [Note] = []
+    
+    private let notesFolder = "notes"
+    private let fileService = ServiceFactory.fileService
+    
+    private init() {
+        setupFolder()
+    }
+    
+    func getNotes() -> [Note] {
+        return notes
+    }
+    
+    func saveNote(_ note: Note) async throws {
+        guard !notes.contains(where: { $0.id == note.id }) else { return }
+        try await fileService.writeJSON(note, to: getNotePath(id: note.id))
         
-        if notes.isEmpty {
-            addBoilerplateNotes()
+        notes.append(note)
+        NotificationCenter.post(.notesUpdated)
+    }
+    
+    func updateNote(id: UUID, title: String, text: String) async throws {
+        guard let noteToUpdate = notes.first(where: { $0.id == id }) else { return }
+        let newNote = Note(id: id, title: title, text: text, date: noteToUpdate.date, author: noteToUpdate.author)
+        
+        try await deleteNote(id: id)
+        try await saveNote(newNote)
+    }
+    
+    func deleteNote(id: UUID) async throws {
+        try fileService.deleteFile(named: getNotePath(id: id))
+        notes.removeAll(where: { $0.id == id })
+        NotificationCenter.post(.notesUpdated)
+    }
+    
+    func deleteAllNotes() async throws {
+        try fileService.deleteFolder(named: notesFolder)
+        try fileService.createFolder(named: notesFolder)
+        
+        notes.removeAll()
+        NotificationCenter.post(.notesUpdated)
+    }
+    
+    func loadNotes(caller: String = #file, line: Int = #line) async throws {
+        print("[\(caller)#\(line)] loadingNotes")
+        guard !isLoadingNotes else { return }
+        isLoadingNotes = true
+        notes = []
+        
+        let fileURLS = try fileService.getFolderContents(of: notesFolder)
+        
+        for fileURL in fileURLS {
+            notes.append(try await fileService.readJSON(from: notesFolder + "/" + fileURL))
         }
         
-        self.notes.sort(by: { $0.title < $1.title })
+        isLoadingNotes = false
+        NotificationCenter.post(.notesUpdated)
     }
     
-    func saveNote(_ note: Note) {
-        notes.append(note)
-        ServiceFactory.persistenceService.savedNotes = notes
+    func saveNotes() async throws {
+        let notes = notes.map { (getNotePath(id: $0.id), $0) }
+        
+        for (fileURL, note) in notes {
+            try await fileService.writeJSON(note, to: fileURL)
+        }
     }
     
-    func toggleFavorite(_ noteIndex: Int) {
-        notes[noteIndex].isFavorite.toggle()
-    }
-    
-    func deleteNote(noteID: UUID) {
-        notes.removeAll(where: { $0.id == noteID })
-        ServiceFactory.persistenceService.savedNotes = notes
+    func getNotePath(id: UUID) -> String {
+        return notesFolder + "/" + id.uuidString + ".json"
     }
 }
 
-
 private extension NotesService {
     
-    func addBoilerplateNotes() {
-        notes.append(Note(title: "Bible",
-                          description: "The Holy book of christians",
-                          text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                          date: Date(timeIntervalSince1970: 0),
-                          isFavorite: true,
-                          author: "People"))
-        
-        notes.append(Note(title: "Apples",
-                          description: "A discussion between Steve Jobs & Isaac Newton",
-                          text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                          date: Date(timeIntervalSince1970: 23456678),
-                          isFavorite: false,
-                          author: "Bill Gates"))
+    func setupFolder() {
+        do {
+            try fileService.createFolder(named: notesFolder)
+        } catch {
+            print("Cant create notes folder")
+        }
     }
-    
 }

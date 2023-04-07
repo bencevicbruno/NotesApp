@@ -10,7 +10,7 @@ import SwiftUI
 
 final class AccountCoordinator: ObservableObject {
     
-    @Published var viewModel = AccountViewModel(persistenceService: ServiceFactory.persistenceService)
+    @Published var viewModel = AccountViewModel()
     
     var onLoggedOut: EmptyCallback?
     

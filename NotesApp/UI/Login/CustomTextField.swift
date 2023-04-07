@@ -11,8 +11,19 @@ struct CustomTextField: View {
     
     let title: String
     @Binding var text: String
+    @Binding var isTextValid: Bool
     @Binding var isFocused: Bool
     let onCommit: () -> Void
+    let validators: [any StringValidator]
+    
+    init(title: String, text: Binding<String>, isTextValid: Binding<Bool> = .constant(true), isFocused: Binding<Bool>, onCommit: @escaping () -> Void = {}, validators: [any StringValidator] = []) {
+        self.title = title
+        self._text = text
+        self._isTextValid = isTextValid
+        self._isFocused = isFocused
+        self.onCommit = onCommit
+        self.validators = validators
+    }
     
     @FocusState private var isFieldFocused
     
@@ -25,7 +36,7 @@ struct CustomTextField: View {
                 .foregroundColor(.black)
             
             Rectangle()
-                .fill(isFieldFocused ? .blue : .gray)
+                .fill(!isTextValid ? .red : isFieldFocused ? .blue : .gray)
                 .frame(height: isFieldFocused ? 4 : 2)
                 .frame(height: 4, alignment: .top)
             
@@ -41,6 +52,9 @@ struct CustomTextField: View {
             withAnimation {
                 isFieldFocused = isFocused
             }
+        }
+        .onChange(of: text) { text in
+            isTextValid = validators.allSatisfy { $0.isValid(text) }
         }
     }
 }

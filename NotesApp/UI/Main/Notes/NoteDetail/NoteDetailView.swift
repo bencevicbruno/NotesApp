@@ -12,35 +12,29 @@ struct NoteDetailView: View {
     @ObservedObject var viewModel: NoteDetailViewModel
     
     var body: some View {
-        Form {
-            Section {
-                Text(noteDate)
-            } header: {
-                Text("Date written")
-            }
+        ZStack(alignment: .top) {
+            content
+                .padding(.top, NavigationBar.totalHeight)
+                .background(
+                    Image("background_notebook")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: UIScreen.width, height: UIScreen.height)
+                        .opacity(0.5)
+                )
             
-            Section {
-                Text(viewModel.note.text)
-            } header: {
-                Text("Contents")
-            }
-            
-            Button("Share") { [weak viewModel] in
-                viewModel?.share()
-            }
+            NavigationBar("Note")
+                .leadingAction(systemImageName: "chevron.left", viewModel.dismiss())
+                .trailingAction(systemImageName: "square.and.arrow.up", viewModel.showOptions())
         }
-        .navigationTitle(viewModel.note.title)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    viewModel.showDeleteDialog()
-                } label: {
-                    Image(systemName: "trash")
-                }
-            }
+        .removeNavigationBar()
+        .edgesIgnoringSafeArea(.all)
+        .alertDialog($viewModel.alertDialog)
+        .choiceDialog($viewModel.choiceDialog)
+        .confirmationDialog($viewModel.confirmationDialog)
+        .overlay {
+            ActivityIndicator(isVisible: viewModel.isActivityRunning)
         }
-        .confirmationDialog($viewModel.deleteConfirmation)
     }
     
     var noteDate: String {
@@ -48,8 +42,37 @@ struct NoteDetailView: View {
     }
 }
 
+private extension NoteDetailView {
+    
+    var content: some View {
+        ScrollView(.vertical) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(verbatim: viewModel.note.title)
+                    .font(.title)
+                    .fontWeight(.bold)
+                
+                Text(verbatim: viewModel.note.text)
+                    .font(.body)
+                    .fontWeight(.medium)
+                    .lineSpacing(12.5)
+                
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("- *\(viewModel.note.author)*")
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    
+                    Text(verbatim: viewModel.note.date.formatted())
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                }
+            }
+            .padding(20)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        }
+    }
+}
+
 struct NoteDetailView_Previews: PreviewProvider {
+    
     static var previews: some View {
-        NoteDetailView(viewModel: NoteDetailViewModel(.sample, noteService: ServiceFactory.notesService))
+        NoteDetailView(viewModel: NoteDetailViewModel(.sample(), navigationPath: .constant(.init())))
     }
 }

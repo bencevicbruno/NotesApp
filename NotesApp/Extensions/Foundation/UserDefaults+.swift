@@ -33,4 +33,8 @@ extension UserDefaults {
         self.set(data, forKey: key)
         print("Sucessfully saved \(key).")
     }
+    
+    func delete(key: String) {
+        self.removeObject(forKey: key)
+    }
 }

@@ -42,7 +42,7 @@ final class RootCoordinator: ObservableObject {
     }
     
     func goToMain() {
-        self.mainCoordinator = MainCoordinator()
+        self.mainCoordinator = MainCoordinator.instance
         self.loginCoordinator = nil
         
         mainCoordinator.onLoggedOut = { [weak self] in

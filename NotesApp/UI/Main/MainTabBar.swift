@@ -15,7 +15,7 @@ struct MainTabBar: View {
         HStack(spacing: 0) {
             ForEach(MainTab.allCases) { tab in
                 VStack(spacing: 4) {
-                    Image(systemName: tab.systemImageName)
+                    Image(systemName: tab.systemImageName(isSelected: tab == currentTab))
                         .resizable()
                         .scaledToFit()
                         .frame(width: Self.imageSize, height: Self.imageSize)
@@ -37,7 +37,6 @@ struct MainTabBar: View {
         .mask {
             tabBarMask
         }
-        .animation(.linear(duration: 0.2), value: currentTab)
     }
     
     static let imageSize: CGFloat = 28
@@ -52,10 +51,10 @@ private extension MainTabBar {
     
     var tabBarMask: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: Self.bottomPadding)
+            RoundedRectangle(cornerRadius: 16)
             
             Rectangle()
-                .padding(.top, Self.topPadding)
+                .padding(.top, 16)
         }
     }
 }
