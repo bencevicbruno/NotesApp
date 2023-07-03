@@ -1,17 +1,22 @@
 //
 //  NotesServiceProtocol.swift
-//  SwiftUINavigation
+//  NotesApp
 //
-//  Created by Bruno Benčević on 28.02.2022..
+//  Created by Bruno Bencevic on 28.03.2023..
 //
 
 import Foundation
 
 protocol NotesServiceProtocol {
+    func getNotes() -> [Note]
     
-    var notes: [Note] { get }
+    func saveNote(_ note: Note) async throws
+    func updateNote(id: UUID, title: String, text: String) async throws
+    func deleteNote(id: UUID) async throws
+    func deleteAllNotes() async throws
     
-    func saveNote(_ note: Note)
-    func toggleFavorite(_ noteIndex: Int)
-    func deleteNote(noteID: UUID)
+    func loadNotes(caller: String, line: Int) async throws
+    func saveNotes() async throws
+    
+    func getNotePath(id: UUID) -> String
 }
